@@ -46,40 +46,40 @@ svg.selectAll("rect")
     .style("fill", function(d) { return d3.hsl(d % x / x * 360, 1, Math.floor(d / x) / y); })
     .on("mouseover", mouseover);
 
-var x = d3.scale.linear().range([0, width]);
-x.domain([0,30]);
-
-console.log(x);
-
 var label = ['Pubs','Pakistani','Brazilian','Peruvian','Halal','Tapas-Small Plates','Italian','Bubble Tea','Irish','Brasseries','Indian','Dim Sum','Cafeteria','Car Wash','Greek','Hot Dogs','Bistros','Sports Bars','Comfort Food','Mexican','Arabian','Fondue','Chicken Wings','Automotive','Vegetarian','Arts & Entertainment','Canadian (New)','Turkish','Food Court','Desserts'];
 
+var x = d3.scale.linear().range([0, width]);
+x.domain([0,30]);
 var xAxis = d3.svg.axis()
 	.scale(x)
 	.ticks(30)
 	.tickFormat(function(d) { return label[d]; })
-	.orient("bottom");
-
-console.log(xAxis);
+	.orient("top");
 
 // Add the X Axis
 svg.append("g")
 	.attr("class", "x axis")
-	.attr("transform", "translate(0," + height + ")")
 	.call(xAxis)
 	.selectAll("text")
 	.style("text-anchor", "start")
-	.attr("transform", "rotate(60)" );
+	.attr("transform", "rotate(-60)" );
+
+var y = d3.scale.linear().range([0, height]);
+y.domain([0,30]);
+var yAxis = d3.svg.axis()
+	.scale(y)
+	.ticks(30)
+	.tickFormat(function(d) { return label[d]; })
+	.orient("left");
+
+// Add the Y Axis
+svg.append("g")
+	.attr("class", "y axis")
+	.call(yAxis)
+	.selectAll("text")
+	.style("text-anchor", "end");
 
 console.log("append done");
-
-/*
-var axis = d3.svg.axis()
-        .scale(xScale)
-        .tickFormat(formatAxis)
-        .ticks(3)
-        .tickValues([100, 200, 300]) //specify an array here for values
-        .orient("bottom");
-*/
 
 function translate(d) {
   return "translate(" + (d % x) * z + "," + Math.floor(d / x) * z + ")";
