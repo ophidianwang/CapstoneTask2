@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<meta charset="utf-8">
+<title>Transform Transitions</title>
+<style>
+
+body {
+  margin: 0;
+}
+
+rect {
+  stroke: #fff;
+  stroke-width: .1px;
+}
+
+</style>
+<body>
+<script src="http://d3js.org/d3.v3.min.js"></script>
+<script>
+
+// Set the dimensions of the canvas / graph
+var margin = {top: 200, right: 200, bottom: 200, left: 200},
+	width = 1360 - margin.left - margin.right,
+	height = 900 - margin.top - margin.bottom;
+/*
+var w = 960,
+    h = 500,
+    z = 20,
+    x = w / z,
+    y = h / z;
+*/
+var z = 20,
+    x = width / z,
+    y = height / z;
+
+var svg = d3.select("body").append("svg")
+	.attr("width", width + margin.left + margin.right)
+	.attr("height", height + margin.top + margin.bottom)
+
+svg.selectAll("rect")
+    .data(d3.range(x * y))
+  .enter().append("rect")
+    .attr("transform", translate)
+    .attr("width", z)
+    .attr("height", z)
+    .style("fill", function(d) { return d3.hsl(d % x / x * 360, 1, Math.floor(d / x) / y); })
+    .on("mouseover", mouseover);
+
+var x = d3.scale.linear().range([0, width]);
+x.domain([0,30]);
+
+console.log(x);
+
+var label = ['Pubs','Pakistani','Brazilian','Peruvian','Halal','Tapas-Small Plates','Italian','Bubble Tea','Irish','Brasseries','Indian','Dim Sum','Cafeteria','Car Wash','Greek','Hot Dogs','Bistros','Sports Bars','Comfort Food','Mexican','Arabian','Fondue','Chicken Wings','Automotive','Vegetarian','Arts & Entertainment','Canadian (New)','Turkish','Food Court','Desserts'];
+
+var xAxis = d3.svg.axis()
+	.scale(x)
+	.ticks(30)
+	.tickFormat(function(d) { return label[d]; })
+	.orient("bottom");
+
+console.log(xAxis);
+
+// Add the X Axis
+svg.append("g")
+	.attr("class", "x axis")
+	.attr("transform", "translate(0," + height + ")")
+	.call(xAxis)
+	.selectAll("text")
+	.style("text-anchor", "start")
+	.attr("transform", "rotate(60)" );
+
+console.log("append done");
+
+/*
+var axis = d3.svg.axis()
+        .scale(xScale)
+        .tickFormat(formatAxis)
+        .ticks(3)
+        .tickValues([100, 200, 300]) //specify an array here for values
+        .orient("bottom");
+*/
+
+function translate(d) {
+  return "translate(" + (d % x) * z + "," + Math.floor(d / x) * z + ")";
+}
+
+function mouseover(d) {
+	console.log(d);
+/*
+  this.parentNode.appendChild(this);
+
+  d3.select(this)
+      .style("pointer-events", "none")
+    .transition()
+      .duration(750)
+      .attr("transform", "translate(480,480)scale(23)rotate(180)")
+    .transition()
+      .delay(1500)
+      .attr("transform", "translate(240,240)scale(0)")
+      .style("fill-opacity", 0)
+      .remove();
+*/      
+}
+
+</script>
