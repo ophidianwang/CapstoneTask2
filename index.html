@@ -35,6 +35,7 @@ var z = 20,
 var svg = d3.select("body").append("svg")
 	.attr("width", width + margin.left + margin.right)
 	.attr("height", height + margin.top + margin.bottom)
+	.attr("transform", "translate(" + margin.left + "," + margin.top + ")");
 
 svg.selectAll("rect")
     .data(d3.range(x * y))
