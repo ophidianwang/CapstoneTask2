@@ -35,29 +35,21 @@ rect {
   <div id="canvas3"></div>
 <script>
 
-/*
-var categories = ['Pubs','Pakistani','Brazilian','Peruvian','Halal','Tapas-Small Plates','Italian','Bubble Tea','Irish','Brasseries','Indian','Dim Sum','Cafeteria','Car Wash','Greek','Hot Dogs','Bistros','Sports Bars','Comfort Food','Mexican','Arabian','Fondue','Chicken Wings','Automotive','Vegetarian','Arts & Entertainment','Canadian (New)','Turkish','Food Court','Desserts'];
-*/
-
 //global settings
-// Set the dimensions of the canvas / graph 
 var margin = {top: 200, right: 200, bottom: 200, left: 200},
   width = 1000 - margin.left - margin.right,
   height = 1000 - margin.top - margin.bottom;
 
 //load json
 d3.json("data/tf_result.json", function(error, data) {
-    console.log(data); // this is your data
     layout("canvas1",data,"Similarity Matrix from TF without IDF" ,false);
 });
 
 d3.json("data/tfidf_result.json", function(error, data) {
-    console.log(data); // this is your data
     layout("canvas2",data,"Similarity Matrix from TFIDF" ,false);
 });
 
 d3.json("data/tfidf_lda_result.json", function(error, data) {
-    console.log(data); // this is your data
     layout("canvas3",data,"Similarity Matrix from TFIDF + LDA , each color is a separate cluster",true);
 });
 
@@ -68,6 +60,7 @@ function layout(target_id,data,title,cluster_color){
   var label = [];
   var label_max = 0;
   
+  //process data for viaualization  
   for (var i=0; i < data.length; i++) {
     //append to categories
     categories.push(data[i].category);  //for axis tick name
@@ -83,7 +76,6 @@ function layout(target_id,data,title,cluster_color){
       label_max = cluster;
 
     for (var j=0; j < sim_matrix.length; j++){
-
       var single = {  "x":i,
                       "y":j,
                       "sim":sim_matrix[j]
@@ -92,9 +84,12 @@ function layout(target_id,data,title,cluster_color){
     }
 
   };
+
+  /*
   console.log(categories);
   console.log(label);
   console.log(rect_data);
+  */
   
   var x = categories.length,
       y = categories.length;
@@ -105,6 +100,7 @@ function layout(target_id,data,title,cluster_color){
     .attr("height", height + margin.top + margin.bottom)
     .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
 
+  // Add rect.s
   svg.append("g")
       .attr("class", "rect")
       .selectAll("rect")
@@ -124,7 +120,6 @@ function layout(target_id,data,title,cluster_color){
     .ticks(30)
     .tickFormat(function(d) { return categories[d]; })
     .orient("top");
-
   
   svg.append("g")
     .attr("class", "x axis")
@@ -159,10 +154,6 @@ function layout(target_id,data,title,cluster_color){
     .attr("class", "legend")    // style the legend
     .text(title);
 
-  function translate(d) {
-    return "translate(" + (d % x) * z + "," + Math.floor(d / x) * z + ")";
-  }
-
   function trans_position(d){
    return "translate(" + (d.x)*z + "," + (d.y)*z + ")"; 
   }
@@ -171,8 +162,8 @@ function layout(target_id,data,title,cluster_color){
 
     var h = 270*label[d.x]/label_max;
     var s = 0;
-
     var l = 0;
+
     if(cluster_color)
       l = 1 - d.sim*0.5;
     else
@@ -188,21 +179,9 @@ function layout(target_id,data,title,cluster_color){
   }
 
   function trans_title(d){
-
-    var title = "sim. ( ";
-    title += categories[d.x];
-    title += " , ";
-    title += categories[d.y];
-    title += " ) : ";
-    title += d.sim;
-
-    return title;
+    return "sim. ( " + categories[d.x] + " , " + categories[d.y] + " ) : " + d.sim;
   }
 
-}
-
-function mouseover(d) {
-	console.log(d);
 }
 
 //tooltip on hover
