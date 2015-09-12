@@ -8,99 +8,206 @@ body {
 }
 
 rect {
-  stroke: #fff;
-  stroke-width: .1px;
+  stroke: #000;
+  stroke-width: .5px;
+}
+
+.legend {
+  font-size: 24px;
+  font-weight: bold;
+  text-anchor: middle;
 }
 
 </style>
+
+<head>
+  <meta content="text/html;charset=utf-8" http-equiv="Content-Type">
+  <meta content="utf-8" http-equiv="encoding">
+  <link rel="stylesheet" href="css/jquery-ui.min.css" />
+  <script src="js/d3.min.js" charset="utf-8"></script>
+  <script src="js/jquery-2.1.4.min.js" charset="utf-8"></script>
+  <script src="js/jquery-ui.min.js" charset="utf-8"></script>
+</head>
+
 <body>
-<script src="http://d3js.org/d3.v3.min.js"></script>
+  <div id="canvas1"></div>
+  <div id="canvas2"></div>
+  <div id="canvas3"></div>
 <script>
 
-// Set the dimensions of the canvas / graph
-var margin = {top: 200, right: 200, bottom: 200, left: 200},
-	width = 1360 - margin.left - margin.right,
-	height = 900 - margin.top - margin.bottom;
 /*
-var w = 960,
-    h = 500,
-    z = 20,
-    x = w / z,
-    y = h / z;
+var categories = ['Pubs','Pakistani','Brazilian','Peruvian','Halal','Tapas-Small Plates','Italian','Bubble Tea','Irish','Brasseries','Indian','Dim Sum','Cafeteria','Car Wash','Greek','Hot Dogs','Bistros','Sports Bars','Comfort Food','Mexican','Arabian','Fondue','Chicken Wings','Automotive','Vegetarian','Arts & Entertainment','Canadian (New)','Turkish','Food Court','Desserts'];
 */
-var z = 20,
-    x = width / z,
-    y = height / z;
 
-var svg = d3.select("body").append("svg")
-	.attr("width", width + margin.left + margin.right)
-	.attr("height", height + margin.top + margin.bottom)
-	.attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+//global settings
+// Set the dimensions of the canvas / graph 
+var margin = {top: 200, right: 200, bottom: 200, left: 200},
+  width = 1000 - margin.left - margin.right,
+  height = 1000 - margin.top - margin.bottom;
 
-svg.selectAll("rect")
-    .data(d3.range(x * y))
-  .enter().append("rect")
-    .attr("transform", translate)
-    .attr("width", z)
-    .attr("height", z)
-    .style("fill", function(d) { return d3.hsl(d % x / x * 360, 1, Math.floor(d / x) / y); })
-    .on("mouseover", mouseover);
+//load json
+d3.json("data/tf_result.json", function(error, data) {
+    console.log(data); // this is your data
+    layout("canvas1",data,"Similarity Matrix from TF without IDF" ,false);
+});
 
-var label = ['Pubs','Pakistani','Brazilian','Peruvian','Halal','Tapas-Small Plates','Italian','Bubble Tea','Irish','Brasseries','Indian','Dim Sum','Cafeteria','Car Wash','Greek','Hot Dogs','Bistros','Sports Bars','Comfort Food','Mexican','Arabian','Fondue','Chicken Wings','Automotive','Vegetarian','Arts & Entertainment','Canadian (New)','Turkish','Food Court','Desserts'];
+d3.json("data/tfidf_result.json", function(error, data) {
+    console.log(data); // this is your data
+    layout("canvas2",data,"Similarity Matrix from TFIDF" ,false);
+});
 
-var x = d3.scale.linear().range([0, width]);
-x.domain([0,30]);
-var xAxis = d3.svg.axis()
-	.scale(x)
-	.ticks(30)
-	.tickFormat(function(d) { return label[d]; })
-	.orient("top");
+d3.json("data/tfidf_lda_result.json", function(error, data) {
+    console.log(data); // this is your data
+    layout("canvas3",data,"Similarity Matrix from TFIDF + LDA , each color is a separate cluster",true);
+});
 
-// Add the X Axis
-svg.append("g")
-	.attr("class", "x axis")
-	.call(xAxis)
-	.selectAll("text")
-	.style("text-anchor", "start")
-	.attr("transform", "rotate(-60)" );
+function layout(target_id,data,title,cluster_color){
 
-var y = d3.scale.linear().range([0, height]);
-y.domain([0,30]);
-var yAxis = d3.svg.axis()
-	.scale(y)
-	.ticks(30)
-	.tickFormat(function(d) { return label[d]; })
-	.orient("left");
+  var categories = []; //build categories
+  var rect_data = []; //build rect data
+  var label = [];
+  var label_max = 0;
+  
+  for (var i=0; i < data.length; i++) {
+    //append to categories
+    categories.push(data[i].category);  //for axis tick name
 
-// Add the Y Axis
-svg.append("g")
-	.attr("class", "y axis")
-	.call(yAxis)
-	.selectAll("text")
-	.style("text-anchor", "end");
+    var cluster = 0;  //default
+    if (typeof(data[i].cluster) !== 'undefined')
+      cluster = data[i].cluster;
+    label.push(cluster);  //decide color
+    
+    var sim_matrix = data[i].sim_matrix;
 
-console.log("append done");
+    if(cluster > label_max)
+      label_max = cluster;
 
-function translate(d) {
-  return "translate(" + (d % x) * z + "," + Math.floor(d / x) * z + ")";
+    for (var j=0; j < sim_matrix.length; j++){
+
+      var single = {  "x":i,
+                      "y":j,
+                      "sim":sim_matrix[j]
+      };
+      rect_data.push(single);
+    }
+
+  };
+  console.log(categories);
+  console.log(label);
+  console.log(rect_data);
+  
+  var x = categories.length,
+      y = categories.length;
+  var z = width/x;  //size of each rect
+
+  var svg = d3.select("#"+target_id).append("svg")
+    .attr("width", width + margin.left + margin.right)
+    .attr("height", height + margin.top + margin.bottom)
+    .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+
+  svg.append("g")
+      .attr("class", "rect")
+      .selectAll("rect")
+      .data(rect_data)
+      .enter().append("rect")
+      .attr("transform", trans_position)
+      .attr("width", z)
+      .attr("height", z)
+      .style("fill", trans_color)
+      .attr("title", trans_title);
+
+  // Add the X Axis
+  var x = d3.scale.linear().range([0, width]);
+  x.domain([0,30]);
+  var xAxis = d3.svg.axis()
+    .scale(x)
+    .ticks(30)
+    .tickFormat(function(d) { return categories[d]; })
+    .orient("top");
+
+  
+  svg.append("g")
+    .attr("class", "x axis")
+    .call(xAxis)
+    .selectAll("text")
+    .style("text-anchor", "start")
+    .attr("dy", z*2/3)
+    .attr("dx", z/2)
+    .attr("transform", "rotate(-60)" );
+
+
+  // Add the Y Axis
+  var y = d3.scale.linear().range([0, height]);
+  y.domain([0,30]);
+  var yAxis = d3.svg.axis()
+    .scale(y)
+    .ticks(30)
+    .tickFormat(function(d) { return categories[d]; })
+    .orient("left");
+  
+  svg.append("g")
+    .attr("class", "y axis")
+    .call(yAxis)
+    .selectAll("text")
+    .style("text-anchor", "end")
+    .attr("dy", z*2/3);
+
+  // Add the Title
+  svg.append("text")
+    .attr("x", width/2) // spacing
+    .attr("y", height + 50) //spacing
+    .attr("class", "legend")    // style the legend
+    .text(title);
+
+  function translate(d) {
+    return "translate(" + (d % x) * z + "," + Math.floor(d / x) * z + ")";
+  }
+
+  function trans_position(d){
+   return "translate(" + (d.x)*z + "," + (d.y)*z + ")"; 
+  }
+
+  function trans_color(d){
+
+    var h = 240*label[d.x]/label_max;
+    var s = 0;
+
+    var l = 0;
+    if(cluster_color)
+      l = 1 - d.sim*0.5;
+    else
+      l = 1 - d.sim;
+
+    //if label of x & y are same, set s to 1
+    if( label[d.x] == label[d.y] && cluster_color){
+      s=1;
+    }
+
+    //return d3.hsl(d % x / x * 360, 1, 1-Math.floor(d / x) / y);
+    return d3.hsl(h,s,l);
+  }
+
+  function trans_title(d){
+
+    var title = "sim. ( ";
+    title += categories[d.x];
+    title += " , ";
+    title += categories[d.y];
+    title += " ) : ";
+    title += d.sim;
+
+    return title;
+  }
+
 }
 
 function mouseover(d) {
 	console.log(d);
-/*
-  this.parentNode.appendChild(this);
-
-  d3.select(this)
-      .style("pointer-events", "none")
-    .transition()
-      .duration(750)
-      .attr("transform", "translate(480,480)scale(23)rotate(180)")
-    .transition()
-      .delay(1500)
-      .attr("transform", "translate(240,240)scale(0)")
-      .style("fill-opacity", 0)
-      .remove();
-*/      
 }
+
+//tooltip on hover
+$(function() {
+  $( document ).tooltip();
+});
 
 </script>
