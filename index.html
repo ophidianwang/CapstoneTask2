@@ -50,7 +50,7 @@ d3.json("data/tfidf_result.json", function(error, data) {
 });
 
 d3.json("data/tfidf_lda_result.json", function(error, data) {
-    layout("canvas3",data,"Similarity Matrix from TFIDF + LDA , each color is a separate cluster",true);
+    layout("canvas3",data,"Similarity Matrix from TFIDF + LDA , colored by cluster",true);
 });
 
 function layout(target_id,data,title,cluster_color){
