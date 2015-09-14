@@ -33,6 +33,7 @@ rect {
   <div id="canvas1"></div>
   <div id="canvas2"></div>
   <div id="canvas3"></div>
+  <div id="canvas4"></div>
 <script>
 
 //global settings
@@ -49,8 +50,12 @@ d3.json("data/tfidf_lda_result.json", function(error, data) {
     layout("canvas2",data,"Similarity Matrix from TFIDF + LDA" ,false);
 });
 
-d3.json("data/tfidf_lda_result.json", function(error, data) {
+d3.json("data/tfidf_lda_kmeans.json", function(error, data) {
     layout("canvas3",data,"Similarity Matrix from TFIDF + LDA , colored by KMeans",true);
+});
+
+d3.json("data/tfidf_lda_brich.json", function(error, data) {
+    layout("canvas4",data,"Similarity Matrix from TFIDF + LDA , colored by Brich",true);
 });
 
 function layout(target_id,data,title,cluster_color){
