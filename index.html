@@ -45,8 +45,8 @@ d3.json("data/tf_result.json", function(error, data) {
     layout("canvas1",data,"Similarity Matrix from TF without IDF" ,false);
 });
 
-d3.json("data/tfidf_result.json", function(error, data) {
-    layout("canvas2",data,"Similarity Matrix from TFIDF" ,false);
+d3.json("data/tfidf_lda_result.json", function(error, data) {
+    layout("canvas2",data,"Similarity Matrix from TFIDF + LDA" ,false);
 });
 
 d3.json("data/tfidf_lda_result.json", function(error, data) {
