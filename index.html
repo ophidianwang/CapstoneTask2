@@ -36,6 +36,10 @@ rect {
   <div id="canvas4"></div>
   <div id="canvas5"></div>
   <div id="canvas6"></div>
+  <div id="canvas7"></div>
+  <div id="canvas8"></div>
+  <div id="canvas9"></div>
+  <div id="canvas10"></div>
 <script>
 
 //global settings
@@ -48,24 +52,36 @@ d3.json("data/tf_result.json", function(error, data) {
     layout("canvas1",data,"Similarity Matrix from TF without IDF" ,false);
 });
 
-d3.json("data/tfidf_lda_kmeans.json", function(error, data) {
+d3.json("data/tfidf_lda_KMeans_16.json", function(error, data) {
     layout("canvas2",data,"Similarity Matrix from TFIDF + LDA" ,false);
 });
 
-d3.json("data/tfidf_lda_kmeans.json", function(error, data) {
-    layout("canvas3",data,"Similarity Matrix from TFIDF+LDA, KMeans, 10 clusters",true);
+d3.json("data/tfidf_lda_KMeans_7.json", function(error, data) {
+    layout("canvas3",data,"Similarity Matrix from TFIDF+LDA, KMeans, 7 clusters",true);
 });
 
-d3.json("data/tfidf_lda_kmeans_7.json", function(error, data) {
-    layout("canvas4",data,"Similarity Matrix from TFIDF+LDA, KMeans, 7 clusters",true);
+d3.json("data/tfidf_lda_KMeans_10.json", function(error, data) {
+    layout("canvas4",data,"Similarity Matrix from TFIDF+LDA, KMeans, 10 clusters",true);
 });
 
-d3.json("data/tfidf_lda_brich.json", function(error, data) {
-    layout("canvas5",data,"Similarity Matrix from TFIDF+LDA, Brich, 10 clusters",true);
+d3.json("data/tfidf_lda_KMeans_13.json", function(error, data) {
+    layout("canvas5",data,"Similarity Matrix from TFIDF+LDA, KMeans, 13 clusters",true);
 });
 
-d3.json("data/tfidf_lda_brich_7.json", function(error, data) {
-    layout("canvas6",data,"Similarity Matrix from TFIDF+LDA, Brich, 7 clusters",true);
+d3.json("data/tfidf_lda_KMeans_16.json", function(error, data) {
+    layout("canvas6",data,"Similarity Matrix from TFIDF+LDA, KMeans, 16 clusters",true);
+});
+
+d3.json("data/tfidf_lda_Brich_7.json", function(error, data) {
+    layout("canvas7",data,"Similarity Matrix from TFIDF+LDA, Brich, 7 clusters",true);
+});
+
+d3.json("data/tfidf_lda_Brich_9.json", function(error, data) {
+    layout("canvas8",data,"Similarity Matrix from TFIDF+LDA, Brich, 9 clusters",true);
+});
+
+d3.json("data/tfidf_lda_Brich_13.json", function(error, data) {
+    layout("canvas9",data,"Similarity Matrix from TFIDF+LDA, Brich, 13 clusters",true);
 });
 
 function layout(target_id,data,title,cluster_color){
