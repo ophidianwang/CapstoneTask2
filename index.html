@@ -34,6 +34,8 @@ rect {
   <div id="canvas2"></div>
   <div id="canvas3"></div>
   <div id="canvas4"></div>
+  <div id="canvas5"></div>
+  <div id="canvas6"></div>
 <script>
 
 //global settings
@@ -51,11 +53,19 @@ d3.json("data/tfidf_lda_kmeans.json", function(error, data) {
 });
 
 d3.json("data/tfidf_lda_kmeans.json", function(error, data) {
-    layout("canvas3",data,"Similarity Matrix from TFIDF + LDA , KMeans clustered",true);
+    layout("canvas3",data,"Similarity Matrix from TFIDF + LDA , KMeans , 10 clusters",true);
+});
+
+d3.json("data/tfidf_lda_kmeans_5.json", function(error, data) {
+    layout("canvas4",data,"Similarity Matrix from TFIDF + LDA , KMeans , 5 clusters",true);
 });
 
 d3.json("data/tfidf_lda_brich.json", function(error, data) {
-    layout("canvas4",data,"Similarity Matrix from TFIDF + LDA , Brich clustered",true);
+    layout("canvas5",data,"Similarity Matrix from TFIDF + LDA , Brich, 10 clusters",true);
+});
+
+d3.json("data/tfidf_lda_brich_5.json", function(error, data) {
+    layout("canvas6",data,"Similarity Matrix from TFIDF + LDA , Brich, 5 clusters",true);
 });
 
 function layout(target_id,data,title,cluster_color){
