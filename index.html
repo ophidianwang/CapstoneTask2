@@ -53,19 +53,19 @@ d3.json("data/tfidf_lda_kmeans.json", function(error, data) {
 });
 
 d3.json("data/tfidf_lda_kmeans.json", function(error, data) {
-    layout("canvas3",data,"Similarity Matrix from TFIDF + LDA , KMeans , 10 clusters",true);
+    layout("canvas3",data,"Similarity Matrix from TFIDF+LDA, KMeans, 10 clusters",true);
 });
 
 d3.json("data/tfidf_lda_kmeans_5.json", function(error, data) {
-    layout("canvas4",data,"Similarity Matrix from TFIDF + LDA , KMeans , 5 clusters",true);
+    layout("canvas4",data,"Similarity Matrix from TFIDF+LDA, KMeans, 5 clusters",true);
 });
 
 d3.json("data/tfidf_lda_brich.json", function(error, data) {
-    layout("canvas5",data,"Similarity Matrix from TFIDF + LDA , Brich, 10 clusters",true);
+    layout("canvas5",data,"Similarity Matrix from TFIDF+LDA, Brich, 10 clusters",true);
 });
 
 d3.json("data/tfidf_lda_brich_5.json", function(error, data) {
-    layout("canvas6",data,"Similarity Matrix from TFIDF + LDA , Brich, 5 clusters",true);
+    layout("canvas6",data,"Similarity Matrix from TFIDF+LDA, Brich, 5 clusters",true);
 });
 
 function layout(target_id,data,title,cluster_color){
