@@ -51,11 +51,11 @@ d3.json("data/tfidf_lda_kmeans.json", function(error, data) {
 });
 
 d3.json("data/tfidf_lda_kmeans.json", function(error, data) {
-    layout("canvas3",data,"Similarity Matrix from TFIDF + LDA , colored by KMeans",true);
+    layout("canvas3",data,"Similarity Matrix from TFIDF + LDA , KMeans clustered",true);
 });
 
 d3.json("data/tfidf_lda_brich.json", function(error, data) {
-    layout("canvas4",data,"Similarity Matrix from TFIDF + LDA , colored by Brich",true);
+    layout("canvas4",data,"Similarity Matrix from TFIDF + LDA , Brich clustered",true);
 });
 
 function layout(target_id,data,title,cluster_color){
