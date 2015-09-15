@@ -52,7 +52,7 @@ d3.json("data/tf_result.json", function(error, data) {
     layout("canvas1",data,"Similarity Matrix from TF without IDF" ,false);
 });
 
-d3.json("data/tfidf_lda_KMeans_16.json", function(error, data) {
+d3.json("data/tfidf_lda_KMeans_7.json", function(error, data) {
     layout("canvas2",data,"Similarity Matrix from TFIDF + LDA" ,false);
 });
 
@@ -67,10 +67,11 @@ d3.json("data/tfidf_lda_KMeans_10.json", function(error, data) {
 d3.json("data/tfidf_lda_KMeans_13.json", function(error, data) {
     layout("canvas5",data,"Similarity Matrix from TFIDF+LDA, KMeans, 13 clusters",true);
 });
-
+/*
 d3.json("data/tfidf_lda_KMeans_16.json", function(error, data) {
     layout("canvas6",data,"Similarity Matrix from TFIDF+LDA, KMeans, 16 clusters",true);
 });
+*/
 
 d3.json("data/tfidf_lda_Brich_7.json", function(error, data) {
     layout("canvas7",data,"Similarity Matrix from TFIDF+LDA, Brich, 7 clusters",true);
